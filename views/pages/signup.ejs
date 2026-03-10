@@ -1,0 +1,33 @@
+<%- include('../partials/head') %>
+<body class="app-bg auth-bg">
+  <%- include('../partials/navbar') %>
+  <br><br>
+  <main class="container py-5 d-flex justify-content-center">
+    <section class="auth-card card shadow-sm border-0 p-4 w-100">
+      <h2 class="fw-bold mb-1">Create account</h2>
+      <p class="text-secondary mb-4">Join EngineeringHub securely</p>
+      <form id="signupForm" novalidate>
+        <div class="mb-3">
+          <label for="fullName" class="form-label">Full name</label>
+          <input id="fullName" name="fullName" type="text" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input id="email" name="email" type="email" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input id="password" name="password" type="password" class="form-control" required>
+          <div class="form-text">Use strong password with uppercase, lowercase, number, symbol and 10+ length.</div>
+        </div>
+        <div id="authAlert" class="alert d-none" role="alert"></div>
+        <button class="btn btn-primary w-100" type="submit">Create account</button>
+      </form>
+      <p class="mt-3 mb-0 text-secondary">Already have account? <a href="/login">Login</a></p>
+    </section>
+  </main>
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+  <script src="/public/js/auth.js"></script>
+</body>
+</html>

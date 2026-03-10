@@ -1,0 +1,912 @@
+<%- include('../partials/head') %>
+<body class="tasks-page">
+  <%- include('../partials/navbar') %>
+  <br><br>
+
+  <!-- Page Header with Gradient -->
+  <div class="page-header">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-8">
+          <h1 class="page-title">
+            <i class="fas fa-tasks me-3"></i>
+            Task & Reminder System
+          </h1>
+          <p class="page-subtitle">Organize your tasks with smart reminders and priority management</p>
+        </div>
+        <div class="col-lg-4 text-lg-end">
+          <div class="header-stats">
+            <div class="stat-item">
+              <span class="stat-label">Total Tasks</span>
+              <span class="stat-value" id="totalTasksCount">0</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Completed</span>
+              <span class="stat-value" id="completedCount">0</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Pending</span>
+              <span class="stat-value" id="pendingCount">0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main class="main-content">
+    <div class="container">
+      <!-- Alert Container -->
+      <div id="alertContainer" class="position-fixed top-0 end-0 p-3" style="z-index: 9999"></div>
+
+      <!-- Add Task Card -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card add-task-card">
+            <div class="card-header">
+              <div class="d-flex align-items-center">
+                <div class="header-icon">
+                  <i class="fas fa-plus-circle"></i>
+                </div>
+                <div>
+                  <h5 class="mb-0">Create New Task</h5>
+                  <small class="text-muted">Add a task with deadline and reminder</small>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <form id="taskForm" class="needs-validation" novalidate>
+                <div class="row g-4">
+                  <!-- Task Title -->
+                  <div class="col-md-8">
+                    <div class="form-group">
+                      <label for="title" class="form-label">
+                        <i class="fas fa-heading me-2 text-primary"></i>Task Title
+                      </label>
+                      <input type="text" class="form-control" id="title" name="title" 
+                             placeholder="e.g., Complete project report" required maxlength="200">
+                      <div class="invalid-feedback">Please enter a task title</div>
+                    </div>
+                  </div>
+
+                  <!-- Priority Selection -->
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="priority" class="form-label">
+                        <i class="fas fa-flag me-2 text-primary"></i>Priority
+                      </label>
+                      <select class="form-select priority-select" id="priority" name="priority" required>
+                        <option value="high" class="priority-high-option">High Priority</option>
+                        <option value="medium" selected class="priority-medium-option">Medium Priority</option>
+                        <option value="low" class="priority-low-option">Low Priority</option>
+                      </select>
+                      <div class="invalid-feedback">Please select a priority</div>
+                    </div>
+                  </div>
+
+                  <!-- Description -->
+                  <div class="col-12">
+                    <div class="form-group">
+                      <label for="description" class="form-label">
+                        <i class="fas fa-align-left me-2 text-primary"></i>Description
+                      </label>
+                      <textarea class="form-control" id="description" name="description" 
+                                rows="3" placeholder="Add details about this task..." maxlength="1000"></textarea>
+                    </div>
+                  </div>
+
+                  <!-- Deadline -->
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="deadline" class="form-label">
+                        <i class="fas fa-calendar-alt me-2 text-primary"></i>Deadline
+                      </label>
+                      <input type="datetime-local" class="form-control" id="deadline" name="deadline" required>
+                      <small class="form-hint">When this task is due</small>
+                      <div class="invalid-feedback">Please select a deadline</div>
+                    </div>
+                  </div>
+
+                  <!-- Reminder Time -->
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="reminderAt" class="form-label">
+                        <i class="fas fa-bell me-2 text-primary"></i>Reminder Time
+                      </label>
+                      <input type="datetime-local" class="form-control" id="reminderAt" name="reminderAt" required>
+                      <small class="form-hint">When to send a reminder</small>
+                      <div class="invalid-feedback">Please select a reminder time</div>
+                    </div>
+                  </div>
+
+                  <!-- Submit Buttons -->
+                  <div class="col-12 mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg px-5" id="submitBtn">
+                      <i class="fas fa-plus-circle me-2"></i>
+                      Add to Tasks
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary btn-lg px-5 ms-2" id="resetBtn">
+                      <i class="fas fa-undo-alt me-2"></i>
+                      Clear Form
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Task List Section -->
+      <div class="row">
+        <div class="col-12">
+          <div class="card tasks-list-card">
+            <div class="card-header">
+              <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                <h5 class="mb-0">
+                  <i class="fas fa-list-check me-2"></i>
+                  Your Tasks
+                </h5>
+                <div class="task-filters d-flex gap-2">
+                  <select class="form-select form-select-sm" id="priorityFilter" style="width: 130px;">
+                    <option value="all">All Priorities</option>
+                    <option value="high">High</option>
+                    <option value="medium">Medium</option>
+                    <option value="low">Low</option>
+                  </select>
+                  <select class="form-select form-select-sm" id="statusFilter" style="width: 130px;">
+                    <option value="all">All Status</option>
+                    <option value="pending">Pending</option>
+                    <option value="in-progress">In Progress</option>
+                    <option value="completed">Completed</option>
+                    <option value="overdue">Overdue</option>
+                  </select>
+                  <button class="btn btn-outline-secondary btn-sm" id="clearFiltersBtn" title="Clear filters">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <!-- Loading State -->
+              <div id="loadingState" class="text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2 text-muted">Loading your tasks...</p>
+              </div>
+
+              <!-- Tasks Table -->
+              <div id="tasksTableContainer" style="display: none;">
+                <div class="table-responsive">
+                  <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                      <tr>
+                        <th style="width: 5%;">Status</th>
+                        <th style="width: 25%;">Title</th>
+                        <th style="width: 20%;">Description</th>
+                        <th style="width: 10%;">Priority</th>
+                        <th style="width: 20%;">Deadline</th>
+                        <th style="width: 20%;">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tasksTableBody">
+                      <!-- Tasks will be dynamically inserted here -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Empty State -->
+              <div id="emptyState" class="empty-state text-center py-5" style="display: none;">
+                <div class="empty-state-icon">
+                  <i class="fas fa-clipboard-list"></i>
+                </div>
+                <h5>No tasks yet</h5>
+                <p class="text-muted">Create your first task using the form above</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Edit Task Modal -->
+  <div class="modal fade" id="editTaskModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="fas fa-edit me-2"></i>
+            Edit Task
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="editTaskForm">
+            <input type="hidden" id="editTaskId">
+            
+            <div class="mb-3">
+              <label for="editTitle" class="form-label">Task Title</label>
+              <input type="text" class="form-control" id="editTitle" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="editPriority" class="form-label">Priority</label>
+              <select class="form-select" id="editPriority" required>
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="editDescription" class="form-label">Description</label>
+              <textarea class="form-control" id="editDescription" rows="2"></textarea>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col">
+                <label for="editDeadline" class="form-label">Deadline</label>
+                <input type="datetime-local" class="form-control" id="editDeadline" required>
+              </div>
+              <div class="col">
+                <label for="editReminder" class="form-label">Reminder</label>
+                <input type="datetime-local" class="form-control" id="editReminder" required>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="editStatus" class="form-label">Status</label>
+              <select class="form-select" id="editStatus" required>
+                <option value="pending">Pending</option>
+                <option value="in-progress">In Progress</option>
+                <option value="completed">Completed</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" id="updateTaskBtn">Update Task</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div class="modal fade" id="deleteTaskModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body text-center p-4">
+          <div class="delete-icon mb-3">
+            <i class="fas fa-exclamation-triangle fa-3x text-danger"></i>
+          </div>
+          <h5>Delete Task?</h5>
+          <p class="text-muted small mb-3">This action cannot be undone.</p>
+          <input type="hidden" id="deleteTaskId">
+          <div class="d-flex gap-2 justify-content-center">
+            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- View Task Modal -->
+  <div class="modal fade" id="viewTaskModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="viewTaskTitle">Task Details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="task-detail-item">
+            <div class="detail-label">Description</div>
+            <div class="detail-value" id="viewTaskDescription">-</div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-6">
+              <div class="task-detail-item">
+                <div class="detail-label">Priority</div>
+                <div class="detail-value" id="viewTaskPriority">-</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="task-detail-item">
+                <div class="detail-label">Status</div>
+                <div class="detail-value" id="viewTaskStatus">-</div>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-6">
+              <div class="task-detail-item">
+                <div class="detail-label">Deadline</div>
+                <div class="detail-value" id="viewTaskDeadline">-</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="task-detail-item">
+                <div class="detail-label">Reminder</div>
+                <div class="detail-value" id="viewTaskReminder">-</div>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-6">
+              <div class="task-detail-item">
+                <div class="detail-label">Created</div>
+                <div class="detail-value" id="viewTaskCreated">-</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="task-detail-item">
+                <div class="detail-label">Last Updated</div>
+                <div class="detail-value" id="viewTaskUpdated">-</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+  <script src="/public/js/tasks.js?v=3.0"></script>
+
+  <style>
+    /* Tasks Page Specific Styles */
+    .tasks-page {
+      background: linear-gradient(135deg, #f5f7fa 0%, #e9ecf5 100%);
+      min-height: 100vh;
+    }
+
+    body.dark-mode .tasks-page {
+      background: linear-gradient(135deg, #1a1c24 0%, #0f1117 100%);
+    }
+
+    /* Page Header */
+    .page-header {
+      background: linear-gradient(135deg, #4361ee 0%, #7209b7 100%);
+      padding: 2.5rem 0;
+      margin-bottom: 2rem;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.1"><path d="M10 50 Q 30 30, 50 50 T 90 50" stroke="white" fill="none" stroke-width="2"/><circle cx="20" cy="20" r="3" fill="white"/><circle cx="80" cy="80" r="3" fill="white"/></svg>');
+      background-size: 100px 100px;
+      opacity: 0.1;
+    }
+
+    .page-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .page-subtitle {
+      font-size: 1rem;
+      opacity: 0.9;
+      margin-bottom: 0;
+    }
+
+    .header-stats {
+       display: flex;
+      justify-content: center;   /* center items horizontally */
+      align-items: center;       /* vertical alignment */
+      gap: 2rem;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 1rem 1.5rem;
+      border-radius: 50px;
+      backdrop-filter: blur(10px);
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-label {
+      display: block;
+      font-size: 0.7rem;
+      opacity: 0.9;
+      margin-bottom: 0.1rem;
+      color: white;
+    }
+
+    .stat-value {
+      font-size: 1.3rem;
+      font-weight: 700;
+      line-height: 1;
+      color: white;
+    }
+
+    /* Add Task Card */
+    .add-task-card {
+      border: none;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      background: white;
+    }
+
+    body.dark-mode .add-task-card {
+      background: #2d2d3a;
+    }
+
+    .add-task-card .card-header {
+      background: linear-gradient(135deg, #f8f9fa, #ffffff);
+      border-bottom: 1px solid #e9ecef;
+      padding: 1.5rem;
+    }
+
+    body.dark-mode .add-task-card .card-header {
+      background: linear-gradient(135deg, #252532, #1e1e2a);
+      border-bottom-color: #3a3a4a;
+    }
+
+    .header-icon {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, #4361ee, #7209b7);
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 1rem;
+    }
+
+    .header-icon i {
+      font-size: 1.8rem;
+      color: white;
+    }
+
+    .add-task-card .card-body {
+      padding: 2rem;
+    }
+
+    /* Form Styles */
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group .form-label {
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      font-size: 0.95rem;
+    }
+
+    body.dark-mode .form-group .form-label {
+      color: #e0e0e0;
+    }
+
+    .form-group .form-control,
+    .form-group .form-select {
+      height: 48px;
+      border-radius: 12px;
+      border: 2px solid #e9ecef;
+      padding: 0.5rem 1rem;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+    }
+
+    .form-group textarea.form-control {
+      height: auto;
+      min-height: 100px;
+    }
+
+    .form-group .form-control:focus,
+    .form-group .form-select:focus {
+      border-color: #4361ee;
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+      outline: none;
+    }
+
+    body.dark-mode .form-group .form-control,
+    body.dark-mode .form-group .form-select {
+      background: #252532;
+      border-color: #3a3a4a;
+      color: white;
+    }
+
+    .form-group .form-control::placeholder {
+      color: #a0aec0;
+      font-size: 0.9rem;
+    }
+
+    .form-hint {
+      display: block;
+      font-size: 0.75rem;
+      color: #718096;
+      margin-top: 0.25rem;
+    }
+
+    /* Priority Select Styling */
+    .priority-select option[value="high"] {
+      background-color: #fee2e2;
+      color: #dc2626;
+    }
+    .priority-select option[value="medium"] {
+      background-color: #fef3c7;
+      color: #d97706;
+    }
+    .priority-select option[value="low"] {
+      background-color: #d1fae5;
+      color: #059669;
+    }
+
+    /* Tasks List Card */
+    .tasks-list-card {
+      border: none;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      background: white;
+    }
+
+    body.dark-mode .tasks-list-card {
+      background: #2d2d3a;
+    }
+
+    .tasks-list-card .card-header {
+      background: white;
+      border-bottom: 1px solid #e9ecef;
+      padding: 1.5rem;
+    }
+
+    body.dark-mode .tasks-list-card .card-header {
+      background: #2d2d3a;
+      border-bottom-color: #3a3a4a;
+    }
+
+    .task-filters .form-select {
+      border-radius: 30px;
+      border: 2px solid #e9ecef;
+      padding: 0.4rem 1rem;
+      font-size: 0.9rem;
+      background-color: white;
+    }
+
+    body.dark-mode .task-filters .form-select {
+      background-color: #252532;
+      border-color: #3a3a4a;
+      color: white;
+    }
+
+    /* Tasks Grid */
+    .tasks-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .task-card {
+      background: #f8fafc;
+      border-radius: 16px;
+      padding: 1.5rem;
+      transition: all 0.3s;
+      border: 1px solid #e9ecef;
+      position: relative;
+      overflow: hidden;
+    }
+
+    body.dark-mode .task-card {
+      background: #252532;
+      border-color: #3a3a4a;
+    }
+
+    .task-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(67, 97, 238, 0.15);
+    }
+
+    .task-card.overdue {
+      border-left: 4px solid #ef4444;
+    }
+    .task-card.high {
+      border-left: 4px solid #dc2626;
+    }
+    .task-card.medium {
+      border-left: 4px solid #d97706;
+    }
+    .task-card.low {
+      border-left: 4px solid #059669;
+    }
+    .task-card.completed {
+      opacity: 0.8;
+      background: #f1f5f9;
+    }
+    body.dark-mode .task-card.completed {
+      background: #1e1e2a;
+    }
+
+    .task-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+
+    .task-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #1e293b;
+      margin: 0;
+    }
+
+    body.dark-mode .task-title {
+      color: white;
+    }
+
+    .task-priority-badge {
+      padding: 0.25rem 0.75rem;
+      border-radius: 30px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .badge-high {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+    .badge-medium {
+      background: #fef3c7;
+      color: #d97706;
+    }
+    .badge-low {
+      background: #d1fae5;
+      color: #059669;
+    }
+
+    .task-description {
+      color: #475569;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+
+    body.dark-mode .task-description {
+      color: #a0a0a0;
+    }
+
+    .task-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      font-size: 0.85rem;
+    }
+
+    .task-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: #64748b;
+    }
+
+    body.dark-mode .task-meta-item {
+      color: #94a3b8;
+    }
+
+    .task-meta-item i {
+      width: 16px;
+      color: #4361ee;
+    }
+
+    .task-status {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 30px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+
+    .status-pending {
+      background: #f1f5f9;
+      color: #475569;
+    }
+    .status-in-progress {
+      background: #dbeafe;
+      color: #2563eb;
+    }
+    .status-completed {
+      background: #dcfce7;
+      color: #059669;
+    }
+    .status-overdue {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+
+    .task-actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid #e9ecef;
+    }
+
+    body.dark-mode .task-actions {
+      border-top-color: #3a3a4a;
+    }
+
+    .task-action-btn {
+      flex: 1;
+      padding: 0.5rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+    }
+
+    .btn-view {
+      background: #e9ecef;
+      color: #2d3748;
+    }
+    .btn-view:hover {
+      background: #d0d5da;
+    }
+    .btn-edit {
+      background: #dbeafe;
+      color: #2563eb;
+    }
+    .btn-edit:hover {
+      background: #bfd9fe;
+    }
+    .btn-delete {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+    .btn-delete:hover {
+      background: #fecaca;
+    }
+    .btn-complete {
+      background: #dcfce7;
+      color: #059669;
+    }
+    .btn-complete:hover {
+      background: #bbf7d0;
+    }
+
+    body.dark-mode .btn-view {
+      background: #2d2d3a;
+      color: #e0e0e0;
+    }
+    body.dark-mode .btn-view:hover {
+      background: #3a3a4a;
+    }
+
+    /* Empty State */
+    .empty-state-icon {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 1.5rem;
+      background: #f1f5f9;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .empty-state-icon i {
+      font-size: 3.5rem;
+      color: #94a3b8;
+    }
+
+    body.dark-mode .empty-state-icon {
+      background: #252532;
+    }
+
+    /* Modal Styles */
+    .modal-content {
+      border-radius: 20px;
+      border: none;
+    }
+
+    .modal-header {
+      background: linear-gradient(135deg, #f8f9fa, #ffffff);
+      border-bottom: 1px solid #e9ecef;
+      padding: 1.5rem;
+    }
+
+    .modal-footer {
+      border-top: 1px solid #e9ecef;
+      padding: 1.5rem;
+    }
+
+    .task-detail-item {
+      margin-bottom: 1rem;
+    }
+
+    .detail-label {
+      font-size: 0.8rem;
+      color: #64748b;
+      margin-bottom: 0.2rem;
+    }
+
+    .detail-value {
+      font-size: 1rem;
+      color: #1e293b;
+      font-weight: 500;
+    }
+
+    body.dark-mode .detail-label {
+      color: #94a3b8;
+    }
+    body.dark-mode .detail-value {
+      color: white;
+    }
+
+    .delete-icon {
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .page-header {
+        padding: 2rem 0;
+      }
+
+      .page-title {
+        font-size: 1.8rem;
+      }
+
+      .header-stats {
+        justify-content: center;
+        margin-top: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .tasks-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .task-filters {
+        flex-wrap: wrap;
+      }
+
+      .task-filters select {
+        width: 100% !important;
+      }
+
+      .add-task-card .card-body {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<%- include('../partials/head') %>
+<body class="error-page">
+  <%- include('../partials/navbar') %>
+
+  <main class="container error-container">
+    <div class="error-card text-center">
+      <div class="error-code"><%= statusCode %></div>
+      <h1 class="error-title"><%= statusTitle %></h1>
+      <p class="error-message"><%= message %></p>
+
+      <% if (details) { %>
+        <div class="alert alert-warning mt-3" role="alert">
+          <%= typeof details === 'string' ? details : JSON.stringify(details) %>
+        </div>
+      <% } %>
+
+      <div class="d-flex justify-content-center gap-2 mt-4 flex-wrap">
+        <a href="" class="btn btn-outline-primary">Try Again</a>
+        <a href="/" class="btn btn-primary">Go to Home</a>
+        <a href="javascript:history.back()" class="btn btn-outline-secondary">Go Back</a>
+      </div>
+    </div>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+
+  <style>
+    .error-page {
+      min-height: 100vh;
+      background: #f8f9ff;
+    }
+
+    .error-container {
+      padding-top: 8rem;
+      padding-bottom: 2rem;
+      min-height: calc(100vh - 160px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .error-card {
+      width: 100%;
+      max-width: 720px;
+      background: #fff;
+      border-radius: 18px;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 10px 30px rgba(17, 24, 39, 0.08);
+      border: 1px solid #eceefe;
+    }
+
+    .error-code {
+      font-size: 4rem;
+      font-weight: 800;
+      line-height: 1;
+      color: #4361ee;
+      margin-bottom: 0.75rem;
+    }
+
+    .error-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #1f2937;
+      margin-bottom: 0.75rem;
+    }
+
+    .error-message {
+      margin: 0 auto;
+      max-width: 560px;
+      color: #4b5563;
+      font-size: 1rem;
+    }
+
+    body.dark-mode .error-page {
+      background: #0f172a;
+    }
+
+    body.dark-mode .error-card {
+      background: #111827;
+      border-color: #334155;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+    }
+
+    body.dark-mode .error-title,
+    body.dark-mode .error-message {
+      color: #e5e7eb;
+    }
+
+    @media (max-width: 576px) {
+      .error-code {
+        font-size: 3rem;
+      }
+
+      .error-title {
+        font-size: 1.4rem;
+      }
+
+      .error-card {
+        padding: 2rem 1.2rem;
+      }
+    }
+  </style>
+</body>
+</html>

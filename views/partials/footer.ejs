@@ -1,0 +1,307 @@
+<footer class="modern-footer">
+  <div class="container">
+    <!-- Main Footer Content -->
+    <div class="footer-content">
+      <div class="row g-4">
+        <!-- Brand Section -->
+        <div class="col-lg-5 col-md-6">
+          <div class="footer-brand">
+            <i class="fa-solid fa-microchip footer-brand-icon"></i>
+            <span class="footer-brand-text">Study<span>Craft</span></span>
+          </div>
+          <p class="footer-description">
+            Secure engineering productivity suite for modern professionals.
+          </p>
+          <div class="social-links">
+            <a href="#" class="social-link" aria-label="GitHub">
+              <i class="fa-brands fa-github"></i>
+            </a>
+            <a href="#" class="social-link" aria-label="LinkedIn">
+              <i class="fa-brands fa-linkedin-in"></i>
+            </a>
+            <a href="#" class="social-link" aria-label="Twitter">
+              <i class="fa-brands fa-x-twitter"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="col-lg-2 col-md-6">
+          <h5 class="footer-title">Quick Links</h5>
+          <ul class="footer-links">
+            <li><a href="/about">About Us</a></li>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/scheduler">Scheduler</a></li>
+            <li><a href="/tasks">Tasks</a></li>
+            <li><a href="/calculator">Calculators</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-2 col-md-6">
+          <h5 class="footer-title">Tools</h5>
+          <ul class="footer-links">
+            <li><a href="/calculator">Scientific Calc</a></li>
+            <li><a href="/matrix">Matrix Calc</a></li>
+            <li><a href="/crypto-calculator">Crypto Calc</a></li>
+            <li><a href="/tasks">Task Tracker</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+          <h5 class="footer-title">Get Started</h5>
+          <ul class="footer-links">
+            <li><a href="/login">Login</a></li>
+            <li><a href="/signup">Create Account</a></li>
+            <li><a href="/about">Who We Are</a></li>
+            <li><a href="mailto:support@studycrafthub.com">Contact Support</a></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Footer Bottom -->
+    <div class="footer-bottom">
+      <div class="row align-items-center">
+        <div class="col-md-6 text-center text-md-start">
+          <p class="copyright">
+            <i class="fa-regular fa-copyright"></i> <%= new Date().getFullYear() %> EngineerHub. All rights reserved.
+          </p>
+        </div>
+        <div class="col-md-6 text-center text-md-end">
+          <div class="footer-badges">
+            <span class="badge">
+               Secure
+            </span>
+            <span class="badge">
+               Fast
+            </span>
+            <span class="badge">
+              <i class="fa-regular fa-heart"></i> Reliable
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  /* Modern Footer Styles - White Background */
+  .modern-footer {
+    background: #ffffff;
+    color: #4a4a4a;
+    border-top: 1px solid #eaeaea;
+    padding: 3rem 0 1.5rem;
+    margin-top: 4rem;
+  }
+
+  /* Dark mode support */
+  body.dark-mode .modern-footer {
+    background: #1a1a1a;
+    color: #e0e0e0;
+    border-top-color: #333;
+  }
+
+  /* Brand Section */
+  .footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .footer-brand-icon {
+    font-size: 1.8rem;
+    color: #4361ee;
+  }
+
+  .footer-brand-text {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #333;
+  }
+
+  body.dark-mode .footer-brand-text {
+    color: #fff;
+  }
+
+  .footer-brand-text span {
+    color: #4361ee;
+  }
+
+  .footer-description {
+    color: #666;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 1.2rem;
+  }
+
+  body.dark-mode .footer-description {
+    color: #999;
+  }
+
+  /* Social Links */
+  .social-links {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .social-link {
+    color: #666;
+    font-size: 1.1rem;
+    transition: all 0.2s ease;
+    text-decoration: none;
+  }
+
+  .social-link:hover {
+    color: #4361ee;
+    transform: translateY(-2px);
+  }
+
+  body.dark-mode .social-link {
+    color: #999;
+  }
+
+  body.dark-mode .social-link:hover {
+    color: #4361ee;
+  }
+
+  /* Footer Titles */
+  .footer-title {
+    color: #333;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 1.2rem;
+    letter-spacing: 0.5px;
+  }
+
+  body.dark-mode .footer-title {
+    color: #fff;
+  }
+
+  /* Footer Links */
+  .footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .footer-links li {
+    margin-bottom: 0.6rem;
+  }
+
+  .footer-links a {
+    color: #666;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s ease;
+  }
+
+  .footer-links a:hover {
+    color: #4361ee;
+  }
+
+  body.dark-mode .footer-links a {
+    color: #999;
+  }
+
+  body.dark-mode .footer-links a:hover {
+    color: #4361ee;
+  }
+
+  /* Footer Bottom */
+  .footer-bottom {
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #eaeaea;
+  }
+
+  body.dark-mode .footer-bottom {
+    border-top-color: #333;
+  }
+
+  .copyright {
+    color: #888;
+    font-size: 0.85rem;
+    margin: 0;
+  }
+
+  .copyright i {
+    font-size: 0.8rem;
+    margin-right: 0.2rem;
+  }
+
+  body.dark-mode .copyright {
+    color: #666;
+  }
+
+  .footer-badges {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+  }
+
+  .footer-badges .badge {
+    background: #f5f5f5;
+    color: #555;
+    padding: 0.3rem 0.8rem;
+    font-weight: 500;
+    font-size: 0.75rem;
+    border-radius: 20px;
+  }
+
+  .footer-badges .badge i {
+    margin-right: 0.3rem;
+    font-size: 0.7rem;
+    color: #4361ee;
+  }
+
+  body.dark-mode .footer-badges .badge {
+    background: #2a2a2a;
+    color: #ccc;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .modern-footer {
+      padding: 2rem 0 1rem;
+    }
+
+    .footer-brand {
+      justify-content: center;
+    }
+
+    .footer-description {
+      text-align: center;
+    }
+
+    .social-links {
+      justify-content: center;
+    }
+
+    .footer-title {
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    .footer-links {
+      text-align: center;
+    }
+
+    .footer-badges {
+      justify-content: center;
+      margin-top: 1rem;
+    }
+
+    .copyright {
+      text-align: center;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .footer-badges {
+      flex-wrap: wrap;
+    }
+  }
+</style>

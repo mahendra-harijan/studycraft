@@ -1,0 +1,631 @@
+<%- include('../partials/head') %>
+<body class="prime-tools-page">
+  <%- include('../partials/navbar') %>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="prime-container">
+      <!-- Header -->
+      <div class="prime-header">
+        <div class="header-title">
+          <i class="fas fa-chart-pie"></i>
+          <h1>Prime Number Tools</h1>
+        </div>
+        <div class="header-description">
+          <span><i class="fas fa-shield-alt" style="color: #10b981;"></i> Secure calculations</span>
+          <span><i class="fas fa-infinity" style="color: #f59e0b;"></i> Large number support</span>
+          <span><i class="fas fa-microchip" style="color: #2563eb;"></i> Mathematical precision</span>
+        </div>
+      </div>
+
+      <!-- Tools Grid -->
+      <div class="tools-grid">
+        <!-- Prime Number Generator -->
+        <div class="tool-card">
+          <div class="tool-header">
+            <div class="tool-icon">
+              <i class="fas fa-chart-pie"></i>
+            </div>
+            <h2>Prime Number Generator</h2>
+          </div>
+          <div class="tool-content">
+            <div class="prime-generator">
+              <div class="generator-controls">
+                <div>
+                  <label style="color: #94a3b8; margin-bottom: 0.5rem; display: block;">Number of Digits</label>
+                  <select id="primeDigits" class="digit-selector">
+                    <option value="1">1 Digit (2-9)</option>
+                    <option value="2">2 Digits (10-99)</option>
+                    <option value="3" selected>3 Digits (100-999)</option>
+                    <option value="4">4 Digits (1000-9999)</option>
+                    <option value="5">5 Digits (10000-99999)</option>
+                    <option value="6">6 Digits (100000-999999)</option>
+                  </select>
+                </div>
+                <div>
+                  <label style="color: #94a3b8; margin-bottom: 0.5rem; display: block;">How Many?</label>
+                  <select id="primeCount" class="digit-selector">
+                    <option value="5">5 primes</option>
+                    <option value="10" selected>10 primes</option>
+                    <option value="20">20 primes</option>
+                    <option value="50">50 primes</option>
+                    <option value="100">100 primes</option>
+                  </select>
+                </div>
+              </div>
+              
+              <button class="btn-generate" data-action="generatePrimes">
+                <i class="fas fa-sync-alt"></i> Generate Primes
+              </button>
+
+              <div class="prime-stats">
+                <div class="stat-item">
+                  <div class="stat-label">Generated</div>
+                  <div class="stat-value" id="generatedCount">0</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-label">Smallest</div>
+                  <div class="stat-value" id="smallestPrime">-</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-label">Largest</div>
+                  <div class="stat-value" id="largestPrime">-</div>
+                </div>
+              </div>
+
+              <div class="prime-list-container">
+                <div class="prime-list" id="primeList">
+                  <div class="text-center" style="color: #94a3b8; padding: 1rem;">Click Generate to see primes</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Prime Checker -->
+        <div class="tool-card">
+          <div class="tool-header">
+            <div class="tool-icon">
+              <i class="fas fa-check-double"></i>
+            </div>
+            <h2>Prime Number Checker</h2>
+          </div>
+          <div class="tool-content">
+            <div class="prime-checker">
+              <div class="input-group">
+                <label>Enter number to check (up to 32 digits)</label>
+                <input type="text" id="primeNumber" value="997" placeholder="Enter number">
+              </div>
+              <button class="btn-calculate" data-action="checkPrime">
+                <i class="fas fa-search"></i> Check Primality
+              </button>
+              <div id="primeResult" class="prime-result">
+                <i class="fas fa-info-circle"></i>
+                <span id="primeMessage">Enter a number to check</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modular Exponentiation -->
+        <div class="tool-card">
+          <div class="tool-header">
+            <div class="tool-icon">
+              <i class="fas fa-exponent"></i>
+            </div>
+            <h2>Modular Exponentiation</h2>
+          </div>
+          <div class="tool-content">
+            <div class="mod-exp-calculator">
+              <div class="input-group">
+                <label>Base (a)</label>
+                <input type="number" id="modBase" value="2" placeholder="Enter base">
+              </div>
+              <div class="input-group">
+                <label>Exponent (b)</label>
+                <input type="number" id="modExponent" value="10" placeholder="Enter exponent">
+              </div>
+              <div class="input-group">
+                <label>Modulus (n)</label>
+                <input type="number" id="modModulus" value="1000" placeholder="Enter modulus">
+              </div>
+              <button class="btn-calculate" data-action="calculateModExp">
+                <i class="fas fa-calculator"></i> Calculate a^b mod n
+              </button>
+              <div class="result-box" id="modExpResult">
+                <div class="label">Result:</div>
+                <div class="value" id="modExpValue">1024</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- GCD Calculator -->
+        <div class="tool-card">
+          <div class="tool-header">
+            <div class="tool-icon">
+              <i class="fas fa-divide"></i>
+            </div>
+            <h2>GCD Calculator</h2>
+          </div>
+          <div class="tool-content">
+            <div class="gcd-calculator">
+              <div class="number-inputs">
+                <div class="input-group">
+                  <label>Number A</label>
+                  <input type="number" id="gcdA" value="48" placeholder="Enter first number">
+                </div>
+                <div class="input-group">
+                  <label>Number B</label>
+                  <input type="number" id="gcdB" value="18" placeholder="Enter second number">
+                </div>
+              </div>
+              <button class="btn-calculate" data-action="calculateGCD">
+                <i class="fas fa-calculator"></i> Calculate GCD
+              </button>
+              <div class="result-box" id="gcdResult">
+                <div class="label">GCD:</div>
+                <div class="value" id="gcdValue">6</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modular Inverse -->
+        <div class="tool-card">
+          <div class="tool-header">
+            <div class="tool-icon">
+              <i class="fas fa-exchange-alt"></i>
+            </div>
+            <h2>Modular Inverse</h2>
+          </div>
+          <div class="tool-content">
+            <div class="prime-checker" style="background: linear-gradient(135deg, #2d3748, #1a202c);">
+              <div class="input-group">
+                <label>Number (a)</label>
+                <input type="number" id="invNumber" value="3" placeholder="Enter number">
+              </div>
+              <div class="input-group">
+                <label>Modulus (m)</label>
+                <input type="number" id="invModulus" value="11" placeholder="Enter modulus">
+              </div>
+              <button class="btn-calculate" data-action="calculateInverse">
+                <i class="fas fa-calculator"></i> Find Inverse
+              </button>
+              <div class="result-box" id="inverseResult">
+                <div class="label" id="inverseLabel">Inverse exists? Yes</div>
+                <div class="value" id="inverseValue">4</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Extended Euclidean Algorithm -->
+        <div class="tool-card">
+          <div class="tool-header">
+            <div class="tool-icon">
+              <i class="fas fa-sitemap"></i>
+            </div>
+            <h2>Extended Euclidean</h2>
+          </div>
+          <div class="tool-content">
+            <div class="gcd-calculator" style="background: linear-gradient(135deg, #3a2c4a, #221b2f);">
+              <div class="input-group">
+                <label>ax + by = gcd(a,b)</label>
+              </div>
+              <div class="number-inputs">
+                <input type="number" id="eucA" value="30" placeholder="a" class="digit-selector">
+                <input type="number" id="eucB" value="20" placeholder="b" class="digit-selector">
+              </div>
+              <button class="btn-calculate" data-action="calculateExtendedEuclidean">
+                <i class="fas fa-calculator"></i> Find x, y
+              </button>
+              <div class="result-box" id="eucResult">
+                <div class="value" id="eucValue">x = 1, y = -1</div>
+                <div style="font-size: 0.9rem; color: #94a3b8;" id="eucEquation">30(1) + 20(-1) = 10</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+
+  <style>
+    /* Prime Tools Page Specific Styles */
+    .prime-tools-page {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      min-height: 100vh;
+    }
+
+    body.dark-mode .prime-tools-page {
+      background: linear-gradient(135deg, #030614 0%, #0f172a 100%);
+    }
+
+    /* Main Content */
+    .main-content {
+      margin-top: 80px;
+      padding: 2rem;
+      min-height: calc(100vh - 80px);
+    }
+
+    .prime-container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* Header Section */
+    .prime-header {
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      border-radius: 20px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      animation: slideDown 0.5s ease-out;
+      border: 1px solid #334155;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .header-title {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .header-title i {
+      font-size: 2.5rem;
+      color: #f59e0b;
+    }
+
+    .header-title h1 {
+      font-size: 2rem;
+      color: white;
+      margin: 0;
+    }
+
+    .header-description {
+      color: #94a3b8;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    /* Tools Grid */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .tool-card {
+      background: #ffffff;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      transition: all 0.3s;
+      border: 1px solid #e2e8f0;
+    }
+
+    body.dark-mode .tool-card {
+      background: #2d2d3a;
+      border-color: #3a3a4a;
+    }
+
+    .tool-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(37, 99, 235, 0.2);
+    }
+
+    .tool-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.5rem 1.5rem 0.5rem 1.5rem;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    body.dark-mode .tool-header {
+      border-bottom-color: #3a3a4a;
+    }
+
+    .tool-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 15px;
+      background: linear-gradient(135deg, #2563eb, #1e40af);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .tool-icon i {
+      font-size: 1.8rem;
+      color: white;
+    }
+
+    .tool-header h2 {
+      font-size: 1.3rem;
+      color: #333;
+      margin: 0;
+    }
+
+    body.dark-mode .tool-header h2 {
+      color: white;
+    }
+
+    .tool-content {
+      padding: 0 1.5rem 1.5rem 1.5rem;
+    }
+
+    /* Prime Generator */
+    .prime-generator {
+      background: linear-gradient(135deg, #1a237e, #0d1b3a);
+      border-radius: 20px;
+      padding: 1.5rem;
+      color: white;
+    }
+
+    .generator-controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .digit-selector {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 12px;
+      padding: 1rem;
+      color: white;
+      width: 100%;
+      cursor: pointer;
+    }
+
+    .digit-selector option {
+      background: #1a237e;
+      color: white;
+    }
+
+    .btn-generate {
+      background: linear-gradient(135deg, #10b981, #0d9488);
+      color: white;
+      border: none;
+      padding: 1rem;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.3s;
+      margin-bottom: 1rem;
+    }
+
+    .btn-generate:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+    }
+
+    .prime-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .stat-item {
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 0.8rem;
+      text-align: center;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: #94a3b8;
+    }
+
+    .stat-value {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #f59e0b;
+    }
+
+    .prime-list-container {
+      background: rgba(0,0,0,0.3);
+      border-radius: 12px;
+      padding: 1rem;
+      max-height: 250px;
+      overflow-y: auto;
+    }
+
+    .prime-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 0.5rem;
+    }
+
+    .prime-item {
+      background: rgba(255,255,255,0.1);
+      padding: 0.5rem;
+      border-radius: 8px;
+      text-align: center;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      transition: all 0.3s;
+    }
+
+    .prime-item:hover {
+      background: #10b981;
+      transform: scale(1.05);
+      cursor: pointer;
+    }
+
+    /* Prime Checker */
+    .prime-checker {
+      background: linear-gradient(135deg, #2c3e50, #1a2632);
+      border-radius: 20px;
+      padding: 1.5rem;
+      color: white;
+    }
+
+    .input-group {
+      margin-bottom: 1rem;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #94a3b8;
+      font-size: 0.9rem;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 1rem;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 12px;
+      color: white;
+      font-family: 'Courier New', monospace;
+    }
+
+    .input-group input:focus {
+      outline: none;
+      border-color: #10b981;
+    }
+
+    .btn-calculate {
+      background: linear-gradient(135deg, #2563eb, #1e40af);
+      color: white;
+      border: none;
+      padding: 1rem;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.3s;
+    }
+
+    .btn-calculate:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+    }
+
+    .prime-result {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      border-radius: 12px;
+      margin-top: 1rem;
+    }
+
+    .prime-result.prime {
+      background: rgba(16, 185, 129, 0.2);
+      border: 1px solid #10b981;
+    }
+
+    .prime-result.not-prime {
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid #ef4444;
+    }
+
+    /* Modular Exponentiation */
+    .mod-exp-calculator {
+      background: linear-gradient(135deg, #1e3a5f, #0b1f33);
+      border-radius: 20px;
+      padding: 1.5rem;
+      color: white;
+    }
+
+    .result-box {
+      background: rgba(0,0,0,0.3);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-top: 1rem;
+      text-align: center;
+    }
+
+    .result-box .label {
+      color: #94a3b8;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .result-box .value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #10b981;
+      word-break: break-all;
+      font-family: 'Courier New', monospace;
+    }
+
+    /* GCD Calculator */
+    .gcd-calculator {
+      background: linear-gradient(135deg, #3a2c4a, #221b2f);
+      border-radius: 20px;
+      padding: 1.5rem;
+      color: white;
+    }
+
+    .number-inputs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .main-content {
+        padding: 1rem;
+      }
+
+      .generator-controls {
+        grid-template-columns: 1fr;
+      }
+      
+      .number-inputs {
+        grid-template-columns: 1fr;
+      }
+      
+      .prime-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .tools-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .header-title h1 {
+        font-size: 1.5rem;
+      }
+
+      .header-description {
+        gap: 1rem;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+
+  <script src="/public/js/crypto-calculator.js"></script>
+</body>
+</html>

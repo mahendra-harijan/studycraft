@@ -1,0 +1,435 @@
+<%- include('../partials/head') %>
+<body class="calculator-page">
+  <%- include('../partials/navbar') %>
+  <br><br><br>
+
+  <!-- Main Calculator Section -->
+  <div class="calculator-wrapper">
+    <div class="calculator-container">
+      <div class="calculator-center">
+        <!-- Calculator Card -->
+        <div class="calculator-card">
+          <!-- Header with DEG Indicator -->
+          <div class="calc-header">
+            <div class="calc-brand">
+              <i class="fas fa-microchip"></i>
+              <span>Engineer<span>Hub</span></span>
+            </div>
+            <button class="deg-indicator" id="angleMode" type="button">DEG</button>
+          </div>
+
+          <!-- Display Section -->
+          <div class="calculator-display">
+            <div class="expression-display" id="expression"></div>
+            <div class="result-display" id="result">0</div>
+          </div>
+
+          <!-- Calculator Buttons Grid - Exactly matching image layout -->
+          <div class="calculator-buttons">
+            <!-- Row 1: Scientific Functions -->
+            <div class="button-row">
+              <button class="calc-btn sci-btn" type="button" data-action="function" data-value="1/x">¹/ₓ</button>
+              <button class="calc-btn sci-btn" type="button" data-action="function" data-value="10^n">10ⁿ</button>
+              <button class="calc-btn sci-btn" type="button" data-action="function" data-value="x²">x²</button>
+              <button class="calc-btn sci-btn" type="button" data-action="function" data-value="x³">x³</button>
+              <button class="calc-btn sci-btn" type="button" data-action="function" data-value="sqrt">√</button>
+              <button class="calc-btn sci-btn" type="button" data-action="function" data-value="sqrtn">√ⁿ</button>
+              <button class="calc-btn sci-btn" type="button" data-action="function" data-value="x^n">xⁿ</button>
+              <button class="calc-btn sci-btn" type="button" data-action="function" data-value="mod">mod</button>
+              <button class="calc-btn sci-btn" type="button" data-action="operator" data-value="%">%</button>
+              <button class="calc-btn sci-btn" type="button" data-action="clear-entry">C</button>
+            </div>
+
+            <!-- Row 2: AC, Operators, Equals -->
+            <div class="button-row ops-row">
+              <button class="calc-btn ac-btn" type="button" data-action="clear-all">AC</button>
+              <button class="calc-btn op-btn" type="button" data-action="operator" data-value="/">÷</button>
+              <button class="calc-btn op-btn" type="button" data-action="operator" data-value="*">×</button>
+              <button class="calc-btn op-btn" type="button" data-action="operator" data-value="-">−</button>
+              <button class="calc-btn op-btn" type="button" data-action="operator" data-value="+">+</button>
+              <button class="calc-btn equals-btn" type="button" data-action="calculate">=</button>
+            </div>
+
+            <!-- Row 3: Numbers 7-9 -->
+            <div class="button-row">
+              <button class="calc-btn num-btn" type="button" data-action="number" data-value="7">7</button>
+              <button class="calc-btn num-btn" type="button" data-action="number" data-value="8">8</button>
+              <button class="calc-btn num-btn" type="button" data-action="number" data-value="9">9</button>
+            </div>
+
+            <!-- Row 4: Numbers 4-6 -->
+            <div class="button-row">
+              <button class="calc-btn num-btn" type="button" data-action="number" data-value="4">4</button>
+              <button class="calc-btn num-btn" type="button" data-action="number" data-value="5">5</button>
+              <button class="calc-btn num-btn" type="button" data-action="number" data-value="6">6</button>
+            </div>
+
+            <!-- Row 5: Numbers 1-3 -->
+            <div class="button-row">
+              <button class="calc-btn num-btn" type="button" data-action="number" data-value="1">1</button>
+              <button class="calc-btn num-btn" type="button" data-action="number" data-value="2">2</button>
+              <button class="calc-btn num-btn" type="button" data-action="number" data-value="3">3</button>
+            </div>
+
+            <!-- Row 6: Zero, Double Zero, Decimal -->
+            <div class="button-row">
+              <button class="calc-btn num-btn" type="button" data-action="number" data-value="0">0</button>
+              <button class="calc-btn num-btn" type="button" data-action="number" data-value="00">00</button>
+              <button class="calc-btn num-btn" type="button" data-action="decimal">.</button>
+            </div>
+
+            <!-- Row 7: Ans Button -->
+            <div class="button-row ans-row">
+              <button class="calc-btn ans-btn" type="button" data-action="ans">Ans</button>
+            </div>
+          </div>
+
+          <!-- Footer Note -->
+          <div class="calculator-footer-note">
+            <span>Advanced Scientific Calculator</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+
+  <style>
+    /* ========== CALCULATOR PAGE STYLES ========== */
+    .calculator-page {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    body.dark-mode .calculator-page {
+      background: linear-gradient(135deg, #1a1c24 0%, #0f1117 100%);
+    }
+
+    .calculator-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.8rem 0.6rem;
+    }
+
+    .calculator-container {
+      width: 100%;
+      max-width: 416px;
+      margin: 0 auto;
+    }
+
+    /* ========== CALCULATOR CARD ========== */
+    .calculator-card {
+      background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+      border-radius: 24px;
+      padding: 1rem;
+      box-shadow: 
+        0 30px 60px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(102, 126, 234, 0.1),
+        inset 0 2px 4px rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+    }
+
+    body.dark-mode .calculator-card {
+      background: linear-gradient(145deg, #1e1e2f 0%, #2d2d3f 100%);
+      box-shadow: 
+        0 30px 60px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(102, 126, 234, 0.2),
+        inset 0 2px 4px rgba(255, 255, 255, 0.05);
+    }
+
+    /* ========== CALCULATOR HEADER ========== */
+    .calc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.68rem;
+      padding-bottom: 0.48rem;
+      border-bottom: 1px solid rgba(102, 126, 234, 0.2);
+    }
+
+    .calc-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .calc-brand i {
+      color: #667eea;
+      font-size: 0.96rem;
+    }
+
+    .calc-brand span {
+      color: #2d3748;
+    }
+
+    .calc-brand span span {
+      color: #667eea;
+    }
+
+    body.dark-mode .calc-brand span {
+      color: #e0e0e0;
+    }
+
+    .deg-indicator {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      padding: 0.28rem 0.8rem;
+      border-radius: 30px;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .deg-indicator:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .deg-indicator:active {
+      transform: translateY(0);
+    }
+
+    /* ========== DISPLAY SECTION ========== */
+    .calculator-display {
+      background: linear-gradient(145deg, #f0f3f8 0%, #e9ecf5 100%);
+      border-radius: 20px;
+      padding: 0.76rem;
+      margin-bottom: 0.8rem;
+      text-align: right;
+      border: 2px solid rgba(102, 126, 234, 0.2);
+      box-shadow: 
+        inset 0 2px 10px rgba(0, 0, 0, 0.05),
+        0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    body.dark-mode .calculator-display {
+      background: linear-gradient(145deg, #1a1a2a 0%, #232334 100%);
+      border: 2px solid rgba(102, 126, 234, 0.3);
+      box-shadow: 
+        inset 0 2px 10px rgba(0, 0, 0, 0.3),
+        0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .expression-display {
+      font-size: 0.8rem;
+      color: #667eea;
+      min-height: 1.2rem;
+      word-wrap: break-word;
+      font-family: 'Courier New', monospace;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.4rem;
+      font-weight: 500;
+    }
+
+    body.dark-mode .expression-display {
+      color: #a0aec0;
+    }
+
+    .result-display {
+      font-size: 1.76rem;
+      font-weight: 700;
+      color: #2d3748;
+      font-family: 'Courier New', monospace;
+      word-wrap: break-word;
+      line-height: 1.2;
+    }
+
+    body.dark-mode .result-display {
+      color: #e0e0e0;
+    }
+
+    /* ========== BUTTONS GRID ========== */
+    .calculator-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .button-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.4rem;
+    }
+
+    .button-row.ops-row {
+      grid-template-columns: repeat(6, 1fr);
+    }
+
+    .button-row.ans-row {
+      grid-template-columns: 1fr;
+    }
+
+    /* First row - 10 buttons */
+    .button-row:first-child {
+      grid-template-columns: repeat(10, 1fr);
+    }
+
+    /* ========== BUTTON STYLES ========== */
+    .calc-btn {
+      aspect-ratio: 1 / 0.8;
+      border: none;
+      border-radius: 12px;
+      font-size: 0.76rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: white;
+      color: #2d3748;
+      box-shadow: 
+        0 4px 6px rgba(0, 0, 0, 0.1),
+        0 1px 3px rgba(0, 0, 0, 0.08);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .calc-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .calc-btn:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 5px rgba(102, 126, 234, 0.2);
+    }
+
+    body.dark-mode .calc-btn {
+      background: #2d2d3f;
+      color: #e0e0e0;
+      box-shadow: 
+        0 4px 6px rgba(0, 0, 0, 0.3),
+        0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Number buttons */
+    .num-btn {
+      background: linear-gradient(145deg, #ffffff, #f0f0f0);
+      font-size: 0.76rem;
+      width: 66%;
+      justify-self: center;
+      aspect-ratio: 1 / 0.58;
+    }
+
+    body.dark-mode .num-btn {
+      background: linear-gradient(145deg, #35354a, #2a2a3a);
+    }
+
+    /* Scientific function buttons */
+    .sci-btn {
+      background: linear-gradient(145deg, #e8ecfb, #d8def5);
+      font-size: 0.64rem;
+      font-weight: 500;
+    }
+
+    body.dark-mode .sci-btn {
+      background: linear-gradient(145deg, #3a3a55, #2f2f45);
+    }
+
+    /* Operator buttons */
+    .op-btn {
+      background: linear-gradient(145deg, #ff9500, #ff7700);
+      color: white;
+      font-size: 0.88rem;
+    }
+
+    .op-btn:hover {
+      background: linear-gradient(145deg, #ffaa00, #ff8800);
+    }
+
+    /* AC button */
+    .ac-btn {
+      background: linear-gradient(145deg, #ff4757, #ee3a4a);
+      color: white;
+      font-size: 0.8rem;
+    }
+
+    .ac-btn:hover {
+      background: linear-gradient(145deg, #ff5e6b, #ff4757);
+    }
+
+    /* Equals button */
+    .equals-btn {
+      background: linear-gradient(145deg, #00b894, #00a07a);
+      color: white;
+      font-size: 0.88rem;
+    }
+
+    .equals-btn:hover {
+      background: linear-gradient(145deg, #00d2a0, #00b894);
+    }
+
+    /* Ans button */
+    .ans-btn {
+      background: linear-gradient(145deg, #a55eea, #8a4fd1);
+      color: white;
+      font-size: 0.8rem;
+      aspect-ratio: 6 / 0.64;
+    }
+
+    .ans-btn:hover {
+      background: linear-gradient(145deg, #b87cff, #a55eea);
+    }
+
+    /* Footer Note */
+    .calculator-footer-note {
+      text-align: center;
+      margin-top: 0.6rem;
+      color: #667eea;
+      font-size: 0.62rem;
+      opacity: 0.8;
+    }
+
+    body.dark-mode .calculator-footer-note {
+      color: #a0aec0;
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 600px) {
+      .calculator-card {
+        padding: 1rem;
+      }
+
+      .calc-btn {
+        font-size: 0.82rem;
+      }
+
+      .num-btn {
+        font-size: 0.9rem;
+        width: 86%;
+        aspect-ratio: 1 / 0.75;
+      }
+
+      .result-display {
+        font-size: 1.9rem;
+      }
+
+      .button-row:first-child {
+        grid-template-columns: repeat(5, 1fr);
+        flex-wrap: wrap;
+      }
+
+      .button-row:first-child .calc-btn {
+        aspect-ratio: 1.5 / 1;
+      }
+    }
+  </style>
+
+  <script src="/public/js/calculator-page.js?v=1.0"></script>
+</body>
+</html>
+
+

@@ -1,0 +1,632 @@
+<%- include('../partials/head') %>
+<body class="calculator-page">
+  <%- include('../partials/navbar') %>
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-8">
+          <h1 class="page-title">
+            <i class="fas fa-th me-3"></i>
+            Matrix Calculator
+          </h1>
+          <p class="page-subtitle">Perform advanced matrix operations with dynamic grid generation</p>
+        </div>
+        <div class="col-lg-4 text-lg-end">
+          <div class="header-stats">
+            <div class="stat-item">
+              <span class="stat-label">Operation</span>
+              <span class="stat-value" id="selectedOperation">Addition</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main class="main-content">
+    <div class="container">
+      <!-- Alert Container -->
+      <div id="alertContainer" class="position-fixed top-0 end-0 p-3" style="z-index: 9999"></div>
+
+      <!-- Operation Selection Card -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card operation-card">
+            <div class="card-header">
+              <div class="d-flex align-items-center">
+                <div class="header-icon">
+                  <i class="fas fa-cogs"></i>
+                </div>
+                <div>
+                  <h5 class="mb-0">Select Operation</h5>
+                  <small class="text-muted">Choose the matrix operation you want to perform</small>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="row g-3">
+                <div class="col-lg-3 col-md-6">
+                  <button class="btn operation-btn active" id="op-add" type="button">
+                    <i class="fas fa-plus-circle me-2"></i>
+                    Addition (A + B)
+                  </button>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                  <button class="btn operation-btn" id="op-subtract" type="button">
+                    <i class="fas fa-minus-circle me-2"></i>
+                    Subtraction (A - B)
+                  </button>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                  <button class="btn operation-btn" id="op-multiply" type="button">
+                    <i class="fas fa-times-circle me-2"></i>
+                    Multiplication (A × B)
+                  </button>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                  <button class="btn operation-btn" id="op-transpose" type="button">
+                    <i class="fas fa-arrows-spin me-2"></i>
+                    Transpose (Aᵀ)
+                  </button>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                  <button class="btn operation-btn" id="op-determinant" type="button">
+                    <i class="fas fa-calculator me-2"></i>
+                    Determinant (det A)
+                  </button>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                  <button class="btn operation-btn" id="op-inverse" type="button">
+                    <i class="fas fa-divide me-2"></i>
+                    Inverse (A⁻¹)
+                  </button>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                  <button class="btn operation-btn" id="op-adjugate" type="button">
+                    <i class="fas fa-grid-2 me-2"></i>
+                    Adjugate (adj A)
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dimension Selection Card (shown for operations that need it) -->
+      <div class="row mb-4" id="dimensionCard">
+        <div class="col-12">
+          <div class="card dimension-card">
+            <div class="card-header">
+              <div class="d-flex align-items-center">
+                <div class="header-icon small-icon">
+                  <i class="fas fa-arrows-up-down-left-right"></i>
+                </div>
+                <div>
+                  <h5 class="mb-0">Matrix Dimensions</h5>
+                  <small class="text-muted">Set the size of your matrices</small>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="row g-4" id="dimensionControls">
+                <!-- Dimensions will be dynamically updated by JavaScript -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Matrix Input Cards -->
+      <div class="row g-4 mb-4" id="matrixCards">
+        <!-- Matrix A Card -->
+        <div class="col-lg-6" id="matrixACard">
+          <div class="card matrix-card">
+            <div class="card-header matrix-header matrix-a-header">
+              <div class="d-flex align-items-center">
+                <div class="matrix-badge">A</div>
+                <div>
+                  <h5 class="mb-0">Matrix A</h5>
+                  <small class="matrix-dimension" id="matrixADim">2 × 2</small>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div id="matrixAGrid" class="matrix-grid">
+                <!-- Matrix A grid will be generated here -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Matrix B Card (shown only for binary operations) -->
+        <div class="col-lg-6" id="matrixBCard">
+          <div class="card matrix-card">
+            <div class="card-header matrix-header matrix-b-header">
+              <div class="d-flex align-items-center">
+                <div class="matrix-badge">B</div>
+                <div>
+                  <h5 class="mb-0">Matrix B</h5>
+                  <small class="matrix-dimension" id="matrixBDim">2 × 2</small>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div id="matrixBGrid" class="matrix-grid">
+                <!-- Matrix B grid will be generated here -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="row mb-4">
+        <div class="col-12 text-center">
+          <button class="btn btn-primary btn-lg px-5 me-3" id="calculateBtn" type="button">
+            <i class="fas fa-play-circle me-2"></i>
+            Calculate
+          </button>
+          <button class="btn btn-outline-secondary btn-lg px-5" id="resetBtn" type="button">
+            <i class="fas fa-undo-alt me-2"></i>
+            Reset All
+          </button>
+        </div>
+      </div>
+
+      <!-- Result Card -->
+      <div class="row" id="resultCard" style="display: none;">
+        <div class="col-12">
+          <div class="card result-card">
+            <div class="card-header result-header">
+              <div class="d-flex align-items-center">
+                <div class="header-icon success-icon">
+                  <i class="fas fa-check-circle"></i>
+                </div>
+                <div>
+                  <h5 class="mb-0">Result</h5>
+                  <small id="resultSubtitle">Operation Result</small>
+                </div>
+              </div>
+            </div>
+            <div class="card-body text-center">
+              <div id="matrixResult" class="matrix-result">
+                <!-- Result will be displayed here -->
+              </div>
+              <div id="scalarResult" class="scalar-result" style="display: none;">
+                <!-- Scalar result will be displayed here -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+
+  <style>
+    /* Calculator Page Styles */
+    .calculator-page {
+      background: linear-gradient(135deg, #f5f7fa 0%, #e9ecf5 100%);
+      min-height: 100vh;
+    }
+
+    body.dark-mode .calculator-page {
+      background: linear-gradient(135deg, #1a1c24 0%, #0f1117 100%);
+    }
+
+    /* Page Header */
+    .page-header {
+      background: linear-gradient(135deg, #4361ee 0%, #7209b7 100%);
+      padding: 2.5rem 0;
+      margin-bottom: 2rem;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.1"><path d="M10 50 Q 30 30, 50 50 T 90 50" stroke="white" fill="none" stroke-width="2"/><circle cx="20" cy="20" r="3" fill="white"/><circle cx="80" cy="80" r="3" fill="white"/></svg>');
+      background-size: 100px 100px;
+      opacity: 0.1;
+    }
+
+    .page-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .page-subtitle {
+      font-size: 1rem;
+      opacity: 0.9;
+      margin-bottom: 0;
+    }
+
+    .header-stats {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 0.8rem 1.5rem;
+      border-radius: 50px;
+      backdrop-filter: blur(10px);
+      display: inline-block;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-label {
+      display: block;
+      font-size: 0.75rem;
+      opacity: 0.9;
+      margin-bottom: 0.2rem;
+    }
+
+    .stat-value {
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    /* Operation Card */
+    .operation-card {
+      border: none;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .operation-card .card-header {
+      background: white;
+      border-bottom: 1px solid #e9ecef;
+      padding: 1.2rem 1.5rem;
+    }
+
+    body.dark-mode .operation-card .card-header {
+      background: #2d2d3a;
+      border-bottom-color: #3a3a4a;
+    }
+
+    .header-icon {
+      width: 45px;
+      height: 45px;
+      background: linear-gradient(135deg, #4361ee, #7209b7);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 1rem;
+    }
+
+    .header-icon i {
+      font-size: 1.5rem;
+      color: white;
+    }
+
+    .header-icon.small-icon {
+      width: 40px;
+      height: 40px;
+    }
+
+    .header-icon.small-icon i {
+      font-size: 1.2rem;
+    }
+
+    .operation-btn {
+      width: 100%;
+      padding: 1rem;
+      border-radius: 12px;
+      font-weight: 500;
+      text-align: left;
+      background: white;
+      border: 2px solid #e9ecef;
+      color: #495057;
+      transition: all 0.3s;
+    }
+
+    body.dark-mode .operation-btn {
+      background: #2d2d3a;
+      border-color: #3a3a4a;
+      color: #e0e0e0;
+    }
+
+    .operation-btn:hover {
+      border-color: #4361ee;
+      background: rgba(67, 97, 238, 0.05);
+      transform: translateY(-2px);
+    }
+
+    .operation-btn.active {
+      background: linear-gradient(135deg, #4361ee, #7209b7);
+      border-color: transparent;
+      color: white;
+    }
+
+    .operation-btn i {
+      width: 24px;
+    }
+
+    /* Dimension Card */
+    .dimension-card {
+      border: none;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .dimension-card .card-header {
+      background: white;
+      border-bottom: 1px solid #e9ecef;
+      padding: 1rem 1.5rem;
+    }
+
+    body.dark-mode .dimension-card .card-header {
+      background: #2d2d3a;
+      border-bottom-color: #3a3a4a;
+    }
+
+    .dimension-control {
+      background: #f8f9fa;
+      padding: 1.5rem;
+      border-radius: 16px;
+    }
+
+    body.dark-mode .dimension-control {
+      background: #252532;
+    }
+
+    .dimension-label {
+      font-weight: 600;
+      color: #495057;
+      margin-bottom: 1rem;
+    }
+
+    body.dark-mode .dimension-label {
+      color: #e0e0e0;
+    }
+
+    .dimension-select {
+      width: 100%;
+      padding: 0.6rem;
+      border-radius: 10px;
+      border: 2px solid #e9ecef;
+      background: white;
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+
+    body.dark-mode .dimension-select {
+      background: #2d2d3a;
+      border-color: #3a3a4a;
+      color: white;
+    }
+
+    .dimension-select:focus {
+      border-color: #4361ee;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+    }
+
+    /* Matrix Cards */
+    .matrix-card {
+      border: none;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      height: 100%;
+    }
+
+    .matrix-header {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid #e9ecef;
+    }
+
+    .matrix-a-header {
+      background: linear-gradient(135deg, #f8f9fa, #ffffff);
+    }
+
+    .matrix-b-header {
+      background: linear-gradient(135deg, #f8f9fa, #ffffff);
+    }
+
+    body.dark-mode .matrix-a-header,
+    body.dark-mode .matrix-b-header {
+      background: linear-gradient(135deg, #2d2d3a, #252532);
+    }
+
+    .matrix-badge {
+      width: 35px;
+      height: 35px;
+      background: linear-gradient(135deg, #4361ee, #7209b7);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 1.2rem;
+      margin-right: 1rem;
+    }
+
+    .matrix-dimension {
+      color: #6c757d;
+      font-size: 0.8rem;
+    }
+
+    body.dark-mode .matrix-dimension {
+      color: #a0a0a0;
+    }
+
+    .matrix-grid {
+      padding: 1rem;
+      overflow-x: auto;
+    }
+
+    .matrix-table {
+      margin: 0 auto;
+      border-collapse: collapse;
+    }
+
+    .matrix-table td {
+      padding: 5px;
+    }
+
+    .matrix-input {
+      width: 80px;
+      height: 60px;
+      text-align: center;
+      border: 2px solid #e9ecef;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: all 0.3s;
+    }
+
+    body.dark-mode .matrix-input {
+      background: #2d2d3a;
+      border-color: #3a3a4a;
+      color: white;
+    }
+
+    .matrix-input:focus {
+      border-color: #4361ee;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+    }
+
+    .matrix-input.error {
+      border-color: #dc3545;
+      background: rgba(220, 53, 69, 0.05);
+    }
+
+    /* Result Card */
+    .result-card {
+      border: none;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .result-header {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      padding: 1.2rem 1.5rem;
+    }
+
+    .success-icon {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .matrix-result {
+      padding: 2rem;
+      overflow-x: auto;
+    }
+
+    .matrix-result .matrix-table {
+      margin: 0 auto;
+    }
+
+    .matrix-result .matrix-table td {
+      min-width: 80px;
+      padding: 10px 15px;
+      border: 1px solid #e9ecef;
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+
+    body.dark-mode .matrix-result .matrix-table td {
+      border-color: #3a3a4a;
+    }
+
+    .scalar-result {
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .scalar-value {
+      font-size: 3rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #4361ee, #7209b7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: inline-block;
+    }
+
+    .scalar-label {
+      font-size: 1rem;
+      color: #6c757d;
+      margin-top: 0.5rem;
+    }
+
+    /* Loading Spinner */
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #f3f3f3;
+      border-top-color: #4361ee;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 2rem auto;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .page-header {
+        padding: 1.5rem 0;
+      }
+
+      .page-title {
+        font-size: 1.8rem;
+      }
+
+      .matrix-input {
+        width: 60px;
+        height: 50px;
+        font-size: 0.9rem;
+      }
+
+      .operation-btn {
+        padding: 0.8rem;
+        font-size: 0.9rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .matrix-input {
+        width: 50px;
+        height: 45px;
+        font-size: 0.8rem;
+      }
+
+      .matrix-result .matrix-table td {
+        min-width: 50px;
+        padding: 5px 8px;
+        font-size: 0.9rem;
+      }
+
+      .scalar-value {
+        font-size: 2rem;
+      }
+    }
+  </style>
+
+  <script src="/public/js/matrix.js?v=1.0"></script>
+</body>
+</html>
