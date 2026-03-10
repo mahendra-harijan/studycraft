@@ -1,4 +1,4 @@
-{
+{  "engines":{"node":"22.20.0"},
   "name": "StudyCraft",
   "version": "1.0.0",
   "description": "Easily can handle our daily basic task with a StudyCraft web application",
@@ -11,9 +11,7 @@
     "seed": "node src/scripts/seed.js",
     "vapid:keys": "node src/scripts/generateVapidKeys.js"
   },
-  "engines": {
-    "node": ">=20"
-  },
+ 
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cloudinary": "^2.5.1",
