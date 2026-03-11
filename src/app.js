@@ -122,7 +122,9 @@ app.use(
     }
   })
 );
-
+app.get('/ping', (req, res) => {
+  res.send("Server is running");
+  });
 app.use('/', webRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/schedules', scheduleRoutes);
@@ -131,6 +133,7 @@ app.use('/api/notifications', notificationRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/tools', toolRoutes);
 app.use('/api/contact', contactRoutes);
+
 
 app.use(notFound);
 app.use(errorHandler);
