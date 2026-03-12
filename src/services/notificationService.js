@@ -3,6 +3,7 @@ const Task = require('../models/Task');
 const Schedule = require('../models/Schedule');
 const Notification = require('../models/Notification');
 const { sendPushToUser } = require('./webPushService');
+const env = require('../config/env');
 
 const createNotificationIfNotExists = async ({ userId, type, title, message, eventKey, details }) => {
   const exists = await Notification.findOne({ userId, eventKey });
@@ -62,7 +63,7 @@ const runReminderTick = async () => {
       userId: task.userId,
       type: 'task-reminder',
       title: 'Task reminder',
-      message: `${task.title} due at ${new Date(task.deadline).toLocaleString()}`,
+      message: `${task.title} due at ${new Date(task.deadline).toLocaleString('en-US', { timeZone: env.appTimezone, month: 'numeric', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}`,
       eventKey: `task-${task._id}-${new Date(task.reminderAt).toISOString().slice(0, 16)}`,
       details: {
         	  taskId: task._id,

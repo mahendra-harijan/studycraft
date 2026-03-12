@@ -45,6 +45,7 @@ module.exports = {
   vapidPrivateKey: process.env.VAPID_PRIVATE_KEY ,
  
  
+  appTimezone: process.env.APP_TIMEZONE || 'Asia/Kolkata',
   contactToEmail: process.env.CONTACT_TO_EMAIL ,
   emailjsPublicKey: process.env.EMAILJS_PUBLIC_KEY ,
   emailjsServiceId: process.env.EMAILJS_SERVICE_ID ,
