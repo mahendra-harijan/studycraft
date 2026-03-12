@@ -215,8 +215,8 @@ console.log('%c✅ TASKS.JS LOADED', 'background: #32cd32; color: white; padding
       title: document.getElementById('title').value,
       priority: document.getElementById('priority').value,
       description: document.getElementById('description').value,
-      deadline: document.getElementById('deadline').value,
-      reminderAt: document.getElementById('reminderAt').value
+      deadline: toISOString(new Date(document.getElementById('deadline').value)),
+      reminderAt: toISOString(new Date(document.getElementById('reminderAt').value))
     };
 
     try {
@@ -299,8 +299,8 @@ console.log('%c✅ TASKS.JS LOADED', 'background: #32cd32; color: white; padding
       title: document.getElementById('editTitle').value,
       priority: document.getElementById('editPriority').value,
       description: document.getElementById('editDescription').value,
-      deadline: document.getElementById('editDeadline').value,
-      reminderAt: document.getElementById('editReminder').value,
+      deadline: toISOString(new Date(document.getElementById('editDeadline').value)),
+      reminderAt: toISOString(new Date(document.getElementById('editReminder').value)),
       completed: document.getElementById('editStatus').value === 'completed'
     };
 
@@ -475,6 +475,12 @@ console.log('%c✅ TASKS.JS LOADED', 'background: #32cd32; color: white; padding
     const hours = String(date.getHours()).padStart(2, '0');
     const minutes = String(date.getMinutes()).padStart(2, '0');
     return `${year}-${month}-${day}T${hours}:${minutes}`;
+  }
+
+  function toISOString(date) {
+    // Convert local datetime to ISO string (UTC) for API
+    // This ensures server receives UTC time regardless of browser timezone
+    return date.toISOString();
   }
 
   function toDatetimeLocalSafe(dateInput) {
