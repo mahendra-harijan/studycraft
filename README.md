@@ -1,4 +1,4 @@
-# EngineerHub (Secure Full-Stack App)
+# StudyCraft (Secure Full-Stack App)
 
 EngineerHub is a production-ready, security-hardened Node.js + Express + MongoDB application with EJS frontend.
 
